@@ -3,6 +3,7 @@ node_js:
         "node"
 
 os:
+  -linux
   - windows
 
 install:
