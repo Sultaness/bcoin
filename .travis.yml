@@ -1,13 +1,12 @@
-language: node_js
-node_js:
-        "node"
+language: node_js 
+node_js: v10.16.0
 
 os:
-  -linux
+  - linux
   - windows
 
-install:
-  - npm install
+install: 
+  - npm install -d
 
 script:
   - npm run test
