@@ -1,0 +1,18 @@
+language: node_js 
+node_js: v10.16.0
+
+os:
+  - linux
+  - windows
+
+install: 
+  - npm install -d
+
+script:
+  - npm run test
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  - slack: merkleblock:ZRA3bl4HQkXwpcZeeRam5RO1
