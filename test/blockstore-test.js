@@ -45,6 +45,8 @@ const {
   FileRecord
 } = require('../lib/blockstore/records');
 
+const {join} = require('path');
+
 describe('BlockStore', function() {
   describe('Abstract', function() {
     let logger = null;
@@ -358,32 +360,32 @@ describe('BlockStore', function() {
     describe('filepath', function() {
       it('will give correct path (0)', () => {
         const filepath = store.filepath(types.BLOCK, 0);
-        assert.equal(filepath, '/tmp/.bcoin/blocks/blk00000.dat');
+	assert.equal(filepath, join(location, 'blk00000.dat')) 
       });
 
       it('will give correct path (1)', () => {
         const filepath = store.filepath(types.BLOCK, 7);
-        assert.equal(filepath, '/tmp/.bcoin/blocks/blk00007.dat');
+        assert.equal(filepath,  join(location, 'blk00007.dat'));
       });
 
       it('will give correct path (2)', () => {
         const filepath = store.filepath(types.BLOCK, 23);
-        assert.equal(filepath, '/tmp/.bcoin/blocks/blk00023.dat');
+        assert.equal(filepath,  join(location, 'blk00023.dat')); 
       });
 
       it('will give correct path (3)', () => {
         const filepath = store.filepath(types.BLOCK, 456);
-        assert.equal(filepath, '/tmp/.bcoin/blocks/blk00456.dat');
+         assert.equal(filepath,  join(location, 'blk00456.dat'));
       });
 
       it('will give correct path (4)', () => {
         const filepath = store.filepath(types.BLOCK, 8999);
-        assert.equal(filepath, '/tmp/.bcoin/blocks/blk08999.dat');
+         assert.equal(filepath,  join(location, 'blk08999.dat'));
       });
 
       it('will give correct path (5)', () => {
         const filepath = store.filepath(types.BLOCK, 99999);
-        assert.equal(filepath, '/tmp/.bcoin/blocks/blk99999.dat');
+         assert.equal(filepath,  join(location, 'blk99999.dat'));
       });
 
       it('will fail over max size', () => {
@@ -400,7 +402,7 @@ describe('BlockStore', function() {
 
       it('will give undo type', () => {
         const filepath = store.filepath(types.UNDO, 99999);
-        assert.equal(filepath, '/tmp/.bcoin/blocks/blu99999.dat');
+         assert.equal(filepath,  join(location, 'blu99999.dat'));
       });
 
       it('will fail for unknown prefix', () => {
@@ -953,13 +955,15 @@ describe('BlockStore', function() {
   describe('FileBlockStore (Integration 2)', function() {
     const location = testdir('blockstore');
     let store = null;
+    const logger = new Logger({level: 'debug'});
 
     beforeEach(async () => {
       await rimraf(location);
 
       store = new FileBlockStore({
         location: location,
-        maxFileLength: 1024 * 1024
+        maxFileLength: 1024 * 1024,
+        logger: logger
       });
 
       await store.ensure();
@@ -1051,6 +1055,7 @@ describe('BlockStore', function() {
         assert.equal(bwritten, part);
       }
 
+      debugger
       await rimraf(resolve(location, './index'));
 
       store = new FileBlockStore({
